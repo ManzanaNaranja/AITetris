@@ -75,17 +75,21 @@ class Board {
     }
   }
   
-  void clearRows() {
+  int clearRows() {
+    int count = 0;
    int[] widths = this.widths();
    
    for(int i = 0; i < height; i++) {
      if(widths[i] == width) {
+       count+=1;
+       
        clearLine(i);
        slideBlocksDown(i);
        widths = this.widths(); // recompute after shift
        i--;// loop through this thing again incase anything fell down.
      }
    }
+   return count;
  }
  
   
@@ -152,6 +156,7 @@ class Board {
  }
  
  int dropHeight(Piece piece, int x) {
+   int prevPos = (int)piece.position.x;
    piece.position.x = x;
    
    int smallestHeight = 10000;
@@ -169,6 +174,7 @@ class Board {
         diff = (int) piece.points[i].y; // ypos - 0 = ypos
       }
    }
+   piece.position.x = prevPos;
    return yIndex - diff;
  }
  

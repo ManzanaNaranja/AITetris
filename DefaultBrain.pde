@@ -1,5 +1,7 @@
 public class DefaultBrain implements Brain {
   
+  int state;
+  
   public Brain.Move bestMove(Board board, Piece piece, int limitHeight, Brain.Move move) {
    if(move== null) move = new Brain.Move();
    double bestScore = 1e20;
@@ -24,7 +26,6 @@ public class DefaultBrain implements Brain {
        //  printBoard();
          board.clearRows();
          double score = evaluateBoard(board);
-       print(score + " ");
          if(score < bestScore) {
            bestScore = score;
            bestX = x-shift;
@@ -36,7 +37,7 @@ public class DefaultBrain implements Brain {
       
      }
      println();
-    // current = current.nextRotation();
+    current = current.nextRotation();
      if(current.equals(piece)) break;
    }
    
