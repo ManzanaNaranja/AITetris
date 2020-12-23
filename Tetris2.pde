@@ -1,7 +1,7 @@
   Board board;
   Piece fallingPiece;
   Input input;
-  DefaultBrain brain;
+  BetterBrain brain;
   Brain.Move move;
 
   
@@ -14,7 +14,7 @@
   
   board = new Board(25, 10, 24);
   input = new Input();
-  brain = new DefaultBrain();
+  brain = new BetterBrain();
   
 
   
@@ -38,12 +38,13 @@
   
   void draw() {
     
-    if(frameCount % 20 == 0 && board.isGameOver() == false) {
+    if(frameCount % 5 == 0 && board.isGameOver() == false) {
         
         if(fallingPiece.position.y < 20) {
             
             if(fallingPiece.position.x < move.x) input.moveRight();
-            if(fallingPiece.position.x > move.x) input.moveLeft();
+            else if(fallingPiece.position.x > move.x) input.moveLeft();
+            else if(fallingPiece.position.x == move.x && fallingPiece.equals(move.piece)) input.drop();
             
             if(fallingPiece.equals(move.piece) == false) input.rotate();
         }    

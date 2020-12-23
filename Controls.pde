@@ -1,6 +1,12 @@
 
 
 public void keyPressed() {
+  
+   if(key == '0') {
+    setup();
+  }
+  
+  
  if(board.isGameOver() == false) {
   if(key == ' ') {
     input.drop();
@@ -26,13 +32,15 @@ public void keyPressed() {
   }
   
   if(key == 'o') {
-    DefaultBrain b = new DefaultBrain();
+    BigBrain b = new BigBrain();
     Brain.Move move = b.bestMove(board, fallingPiece, 23, new Brain.Move());
     println(move.x + " " + move.y);
     
     board.place(move.piece, move.x, move.y);
     newCycle();
   }
+  
+ 
   
   
   
