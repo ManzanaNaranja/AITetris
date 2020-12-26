@@ -47,7 +47,7 @@ public void keyPressed() {
   
 
   
-  board.show(fallingPiece);
+  board.show(fallingPiece, nextFallingPiece);
   
  }
 }

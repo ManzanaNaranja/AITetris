@@ -10,6 +10,9 @@ class Board {
   
   PieceType[][] squares;
   PieceType[][] backup;
+  PieceType[][] backup2;
+  
+  boolean gameOver = false;
   
   Board(int size, int width, int height) {
     this.size = size;
@@ -21,10 +24,28 @@ class Board {
     
     this.squares = new PieceType[height][width];
     this.backup = new PieceType[height][width];
+    this.backup2 = new PieceType[height][width];
     initArray(squares);
     initArray(backup);
+    initArray(backup2);
     
 
+  }
+  
+  void commit2() {
+    for(int y = 0; y < this.height; y++) {
+      for(int x = 0; x < this.width; x++) {
+        backup2[y][x] = squares[y][x];
+      }
+    }
+  }
+
+  void undo2() {
+    for(int y = 0; y < this.height; y++) {
+      for(int x = 0; x < this.width; x++) {
+        squares[y][x] = backup2[y][x];
+      }
+    }
   }
   
   void commit() {
@@ -55,7 +76,8 @@ class Board {
   }
   
   boolean isGameOver() {
-    if(widths()[height-2] != 0) {
+    if(this.gameOver == true) return true;
+    if(widths()[height-4] != 0) {
       return true;
     }
     return false;
@@ -100,8 +122,7 @@ class Board {
       }
     }
   }
- 
- 
+  
    private void clearLine(int row) {
     for(int i = 0; i < squares[0].length; i++) {
       this.squares[row][i] = PieceType.Empty;
@@ -166,7 +187,7 @@ class Board {
    
    for(int i = 0; i < piece.points.length; i++) {
       int xPos = (int)(piece.position.x + piece.points[i].x);
-      int yPos = (int)(16 + piece.points[i].y);
+      int yPos = (int)(100 + piece.points[i].y); // DROPPED FROM INFINITELY HIGH
       int height = (int)(yPos - heights()[xPos]);
       if(height < smallestHeight) {
         smallestHeight = height;
@@ -178,10 +199,47 @@ class Board {
    return yIndex - diff;
  }
  
- void show(Piece piece) {
+ void show(Piece piece, Piece nextPiece) {
+   background(#F0F0F0);
    drawPieces();
    drawFallingPiece(piece);
+ //  drawNextFallingPiece(nextPiece);
+   drawScore();
    drawBorder();
+   
+ }
+ 
+ void drawScore() {
+     push();
+     fill(0);
+     text("score: " + board.score, 240, 65);
+     pop();
+ }
+ 
+ void drawNextFallingPiece(Piece piece) {
+   int gridSize = 25;
+
+   
+   push();
+   noStroke();
+   
+   
+   for(int i = 0; i < piece.points.length; i++) {
+     fill(piece.type.getColor());
+     rect(xShift + size * width+30+piece.points[i].x*gridSize+10, 75+120-piece.points[i].y*gridSize-gridSize-30, gridSize, gridSize);
+   }
+   pop();
+  drawNextFallingPieceBorder();
+
+ }
+ 
+ void drawNextFallingPieceBorder() {
+   push();
+   stroke(0);
+   noFill();
+   strokeWeight(3);
+   rect(xShift + size * width+30, 75, 120, 120);
+   pop();
  }
  
  void drawFallingPiece(Piece piece) {

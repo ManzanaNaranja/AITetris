@@ -20,11 +20,16 @@ public class DefaultBrain implements Brain {
      
      for(int x = 0; x < xBound; x++) {
        int y = board.dropHeight(current, x-shift);
-      // print(y + " ");
+ 
        if(y<yBound) {
          board.place(current, x-shift, y);
-       //  printBoard();
+
          rowsCleared = board.clearRows();
+         
+         
+         
+         
+         
          double score = evaluateBoard(board);
          if(score < bestScore) {
            bestScore = score;
@@ -32,7 +37,7 @@ public class DefaultBrain implements Brain {
            bestY = y;
            bestPiece = current;
          }
-       }
+       } 
         board.undo();
       
      }
@@ -42,7 +47,10 @@ public class DefaultBrain implements Brain {
    }
    
    
-   if(bestPiece == null) return null;
+   if(bestPiece == null) {
+     board.gameOver = true;
+     return null;
+   }
    else {
      move.x = bestX;
      move.y = bestY;

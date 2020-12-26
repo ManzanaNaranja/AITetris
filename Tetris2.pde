@@ -1,7 +1,8 @@
   Board board;
   Piece fallingPiece;
+  Piece nextFallingPiece;
   Input input;
-  BetterBrain brain;
+  DefaultBrain brain;
   Brain.Move move;
 
   
@@ -14,7 +15,7 @@
   
   board = new Board(25, 10, 24);
   input = new Input();
-  brain = new BetterBrain();
+  brain = new DefaultBrain();
   
 
   
@@ -25,11 +26,12 @@
    text("score: " + board.score, 240, 65);
   
   fallingPiece = getRandomPiece();
+  nextFallingPiece = getRandomPiece();
   
 
-  board.show(fallingPiece);
+  board.show(fallingPiece, nextFallingPiece);
   
-  move = brain.bestMove(board, fallingPiece, 23, new Brain.Move());
+  move = brain.bestMove(board, fallingPiece, 20, new Brain.Move());
   
   
   }
@@ -38,9 +40,9 @@
   
   void draw() {
     
-    if(frameCount % 5 == 0 && board.isGameOver() == false) {
+    if(frameCount % 3 == 0 && board.isGameOver() == false) {
         
-        if(fallingPiece.position.y < 20) {
+        if(fallingPiece.position.y < 20 && move != null) {
             
             if(fallingPiece.position.x < move.x) input.moveRight();
             else if(fallingPiece.position.x > move.x) input.moveLeft();
@@ -50,26 +52,27 @@
         }    
 
        
-        background(#F0F0F0);
-        fill(0);
-        text("score: " + board.score, 240, 65);
+      
         
         if(false == input.moveDown()) {
           newCycle();
         }
-        board.show(fallingPiece);
+        board.show(fallingPiece, nextFallingPiece);
     }
+    
+   
     
     
   }
   
   void newCycle() {
-    fallingPiece = getRandomPiece();
+    fallingPiece = nextFallingPiece;
+    nextFallingPiece = getRandomPiece();
     fallingPiece.resetPosition();
     fallingPiece = fallingPiece.resetRotation();
     board.score += board.clearRows();
     
-    move = brain.bestMove(board, fallingPiece, 23, new Brain.Move());
+    move = brain.bestMove(board, fallingPiece, 20, new Brain.Move());
     
 
     
